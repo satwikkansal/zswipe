@@ -6,4 +6,6 @@ notifiers
 pydantic
 pyotp
 python-dotenv
+python-multipart
 uvicorn
+git+https://github.com/nftstorage/python-client.git

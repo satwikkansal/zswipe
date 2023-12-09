@@ -1,18 +1,19 @@
 import os
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Depends, status as http_status
+from fastapi import FastAPI, HTTPException, Depends, status as http_status, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer
 import pyotp
 import uvicorn
 
+
 from logger import get_logger
+from storage import upload_to_filecoin
 from utils import ErrorHandlerRoute
 
 load_dotenv()
 logger = get_logger(__name__)
-auth_token = os.environ['AUTH_TOKEN']
 
 app = FastAPI(
     title='f5 API', description='', version='0.1',
@@ -78,6 +79,16 @@ def update_config_and_save(token=Depends(HTTPBearer()), totp=Depends(get_totp)):
                             detail=f'Can not verify otp : {token.credentials}')
 
     return 'OK'
+
+
+@app.post("/upload-file/")
+async def upload_file(file: UploadFile = File(...), api_key: str = 'YOUR_API_KEY'):
+    file_content = await file.read()
+    file_url = upload_to_filecoin(file_content, api_key)
+    if file_url:
+        return {"file_url": file_url}
+    else:
+        return {"error": "File upload failed"}
 
 
 @app.on_event('startup')
