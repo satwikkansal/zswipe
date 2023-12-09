@@ -25,6 +25,6 @@ if __name__ == '__main__':
     import os
     from dotenv import load_dotenv
     load_dotenv()
-    file_content = open('test1.jpg', 'rb').read()
+    file_content = open('test3.png', 'rb').read()
     file_url = upload_to_filecoin(file_content, os.environ['NFT_STORAGE_API_KEY'])
     print(file_url)

@@ -8,11 +8,11 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
-        url: "https://scroll-sepolia.blockpi.network/v1/rpc/public",
+        url: "https://rpc.ankr.com/scroll_sepolia_testnet",
       },
     },
     sepolia: {
-      url: "https://scroll-sepolia.blockpi.network/v1/rpc/public",
+      url: "https://rpc.ankr.com/scroll_sepolia_testnet",
       chainId: 534351,
       // Add other network configuration here like accounts
       // private key
