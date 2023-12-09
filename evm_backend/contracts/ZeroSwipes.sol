@@ -27,9 +27,8 @@ contract ZeroSwipes {
     event RecommendationAdded(address indexed profile, address indexed recommended, uint weight);
     event MatchMade(address indexed profile, address indexed matchAddress);
 
-
     function goLive(Gender seekingGender) external payable {
-        require(msg.value == 1 ether, "Must send 1 ETH");
+        require(msg.value >= 10e7, "Must send at least 10e-7 ETH");
         require(!profiles[msg.sender].isActive, "Profile is already active");
 
         profiles[msg.sender] = Profile(true, msg.value, msg.sender, seekingGender);
@@ -46,7 +45,7 @@ contract ZeroSwipes {
     }
 
     function getRandomProfiles(address profileAddress) public view returns (address[] memory) {
-        require(profiles[profileAddress].isActive, "Profile is not active");
+        // require(profiles[profileAddress].isActive, "Profile is not active");
 
         Gender seekingGender = profiles[profileAddress].seekingGender;
         address[] storage soughtGenderProfiles;
@@ -76,7 +75,7 @@ contract ZeroSwipes {
         return randomProfiles;
     }
 
-    function recommend(address profileAddress, address[] calldata recommendedAddresses) external {
+    function recommend(address profileAddress, address[] calldata recommendedAddresses) payable external {
         require(profiles[profileAddress].isActive, "Profile is not active");
         uint weight = 1 ether / recommendedAddresses.length;
         for (uint i = 0; i < recommendedAddresses.length; i++) {
@@ -90,7 +89,7 @@ contract ZeroSwipes {
     }
 
     function matchAndDistributeBounty(address profileAddress, address matchAddress) external {
-    require(profiles[profileAddress].isActive && profiles[matchAddress].isActive, "One or both profiles are not active");
+    // require(profiles[profileAddress].isActive && profiles[matchAddress].isActive, "One or both profiles are not active");
 
     profiles[profileAddress].isActive = false;
     profiles[matchAddress].isActive = false;
@@ -105,14 +104,20 @@ contract ZeroSwipes {
 }
 
 function distributeBounty(address profileAddress, address matchAddress) internal {
-    Recommendation[] memory profileRecs = recommendations[profileAddress][matchAddress];
-    for (uint i = 0; i < profileRecs.length; i++) {
-        address recommender = profileRecs[i].recommender;
-        uint weight = profileRecs[i].weight;
-        payable(recommender).transfer(weight);
+        Recommendation[] memory profileRecs = recommendations[profileAddress][matchAddress];
+        uint totalWeight = 0;
+        for (uint i = 0; i < profileRecs.length; i++) {
+            totalWeight += profileRecs[i].weight;
+        }
+
+        for (uint i = 0; i < profileRecs.length; i++) {
+            address recommender = profileRecs[i].recommender;
+            uint weight = profileRecs[i].weight;
+            uint share = (profiles[profileAddress].balance * weight) / totalWeight;
+            payable(recommender).transfer(share);
+        }
+        delete recommendations[profileAddress][matchAddress];
     }
-    delete recommendations[profileAddress][matchAddress];
-}
 
 function createDefaultMaleProfile() external payable {
     require(msg.value == 1 ether || msg.value == 10e-7 ether, "Invalid amount of ETH");

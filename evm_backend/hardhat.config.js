@@ -16,7 +16,7 @@ module.exports = {
       chainId: 534351,
       // Add other network configuration here like accounts
       // private key
-      accounts: [process.env.PRIVATE_KEY_1],
+      accounts: [process.env.PRIVATE_KEY_1, process.env.PRIVATE_KEY_2, process.env.PRIVATE_KEY_3, process.env.PRIVATE_KEY_4],
     },
   },
 };
