@@ -6,19 +6,28 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer
 import pyotp
 import uvicorn
-
+from pydantic import BaseModel
+from web3 import Web3
 
 from logger import get_logger
 from storage import upload_to_filecoin
 from utils import ErrorHandlerRoute
+from wrapper import ZeroSwipe
 
 load_dotenv()
 logger = get_logger(__name__)
 
 app = FastAPI(
-    title='f5 API', description='', version='0.1',
+    title='ZeroSwipes API', description='', version='0.1',
 )
 app.router.route_class = ErrorHandlerRoute
+
+
+rpc_url = "https://scroll-sepolia.blockpi.network/v1/rpc/public"  # Replace with your Ethereum node RPC URL
+contract_address = "0x490d9eA1AB42DF76a174D0216C127fc1834Fa89a"  # Replace with your contract address
+
+# Initialize the DatingAppWrapper with contract details
+dating_app = ZeroSwipe(contract_address, rpc_url)
 
 
 # TODO: This needs to be tuned
@@ -60,7 +69,34 @@ async def upload_file(file: UploadFile = File(...)):
         return {"file_url": file_url}
     else:
         return {"error": "File upload failed"}
+    
+@app.get("/profile/{address}")
+def get_profile(address: str):
+    try:
+        profile = dating_app.get_profile(Web3.to_checksum_address(address))
+        return profile
+    except Exception as e:  # You can refine the Exception handling
+        raise HTTPException(status_code=400, detail=str(e))
 
+@app.get("/active-profiles/")
+def get_active_profiles():
+    try:
+        active_profiles = dating_app.get_active_profiles()
+        return active_profiles
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+class ProfileAddress(BaseModel):
+    address: str
+
+@app.post("/recommendations/")
+def get_recommendations(profile_address: ProfileAddress):
+    try:
+        recommendations = dating_app.get_recommendations(Web3.to_checksum_address(profile_address.address))
+        return recommendations
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.on_event('startup')
 async def startup():

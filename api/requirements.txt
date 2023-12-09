@@ -8,4 +8,5 @@ pyotp
 python-dotenv
 python-multipart
 uvicorn
+web3
 git+https://github.com/nftstorage/python-client.git
