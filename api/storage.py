@@ -13,9 +13,18 @@ def upload_to_filecoin(file_content, api_key):
 
         try:
             # Store the file
-            api_response = api_instance.store(file_stream)
+            api_response = api_instance.store(file_stream, _check_return_type=False)
             file_url = f"https://ipfs.io/ipfs/{api_response.value['cid']}"
             return file_url
         except nft_storage.ApiException as e:
             print(f"Exception when calling NFTStorageAPI->store: {e}\n")
             return None
+
+
+if __name__ == '__main__':
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    file_content = open('test1.jpg', 'rb').read()
+    file_url = upload_to_filecoin(file_content, os.environ['NFT_STORAGE_API_KEY'])
+    print(file_url)

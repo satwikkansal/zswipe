@@ -52,39 +52,10 @@ async def status():
     return 'OK'
 
 
-@app.get('/basic_auth')
-async def get_config(token=Depends(HTTPBearer())):
-    creds = token.credentials
-    if creds != auth_token:
-        raise HTTPException(status_code=http_status.HTTP_403_FORBIDDEN, detail="Invalid auth token")
-    return 'OK'
-
-
-@app.post('/basic_auth_and_2fa',)
-def update_config_and_save(token=Depends(HTTPBearer()), totp=Depends(get_totp)):
-    items = token.credentials.split(':', 1)
-    if len(items) < 2:
-        raise HTTPException(status_code=http_status.HTTP_403_FORBIDDEN,
-                            detail=f'Invalid credentials provided : {token.credentials}')
-    req_auth_token = items[0]
-    otp_code = items[1]
-
-    if req_auth_token != auth_token:
-        raise HTTPException(status_code=http_status.HTTP_403_FORBIDDEN,
-                            detail=f'Invalid auth token : {token.credentials}')
-
-    # verify otp code
-    if not totp.verify(otp_code):
-        raise HTTPException(status_code=http_status.HTTP_403_FORBIDDEN,
-                            detail=f'Can not verify otp : {token.credentials}')
-
-    return 'OK'
-
-
 @app.post("/upload-file/")
-async def upload_file(file: UploadFile = File(...), api_key: str = 'YOUR_API_KEY'):
+async def upload_file(file: UploadFile = File(...)):
     file_content = await file.read()
-    file_url = upload_to_filecoin(file_content, api_key)
+    file_url = upload_to_filecoin(file_content, os.environ['NFT_STORAGE_API_KEY'])
     if file_url:
         return {"file_url": file_url}
     else:
