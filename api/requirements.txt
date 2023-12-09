@@ -1,0 +1,9 @@
+arrow
+fastapi
+gunicorn
+loguru
+notifiers
+pydantic
+pyotp
+python-dotenv
+uvicorn
