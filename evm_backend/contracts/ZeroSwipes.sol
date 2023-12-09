@@ -113,4 +113,16 @@ function distributeBounty(address profileAddress, address matchAddress) internal
     }
     delete recommendations[profileAddress][matchAddress];
 }
+
+function createDefaultMaleProfile() external payable {
+    require(msg.value == 1 ether || msg.value == 10e-7 ether, "Invalid amount of ETH");
+
+    if (msg.value == 1 ether) {
+        require(!profiles[msg.sender].isActive, "Profile is already active");
+        profiles[msg.sender] = Profile(true, msg.value, msg.sender, Gender.Male);
+        activeMaleProfiles.push(msg.sender);
+        emit ProfileActivated(msg.sender, Gender.Male);
+    }
+    // If 10e-7 ether is sent, do nothing.
+}
 }
