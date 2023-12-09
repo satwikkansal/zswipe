@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+
+interface IAnonAadhaarVerifier {
+    function verifyProof(
+        uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[34] calldata _pubSignals
+    ) external view returns (bool);
+}
+
+
 contract ZeroSwipes {
     enum Gender { Male, Female, Transgender }
 
@@ -27,9 +35,21 @@ contract ZeroSwipes {
     event RecommendationAdded(address indexed profile, address indexed recommended, uint weight);
     event MatchMade(address indexed profile, address indexed matchAddress);
 
+    address public anonAadhaarVerifierAddr;
+
+    constructor(address _verifierAddr) {
+        anonAadhaarVerifierAddr = _verifierAddr;
+    }
+
+    function verify(uint256[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[34] calldata _pubSignals) public view returns (bool) {
+        return IAnonAadhaarVerifier(anonAadhaarVerifierAddr).verifyProof(_pA, _pB, _pC, _pubSignals);
+    }
+
     function goLive(Gender seekingGender) external payable {
         require(msg.value >= 10e7, "Must send at least 10e-7 ETH");
         require(!profiles[msg.sender].isActive, "Profile is already active");
+
+        // require(verify(_pA, _pB, _pC, _pubSignals), "Your idendity proof is not valid");
 
         profiles[msg.sender] = Profile(true, msg.value, msg.sender, seekingGender);
 
@@ -77,6 +97,9 @@ contract ZeroSwipes {
 
     function recommend(address profileAddress, address[] calldata recommendedAddresses) payable external {
         require(profiles[profileAddress].isActive, "Profile is not active");
+
+        // require(verify(_pA, _pB, _pC, _pubSignals), "Your idendity proof is not valid");
+
         uint weight = 1 ether / recommendedAddresses.length;
         for (uint i = 0; i < recommendedAddresses.length; i++) {
             recommendations[profileAddress][recommendedAddresses[i]].push(Recommendation(msg.sender, weight));
@@ -121,6 +144,7 @@ function distributeBounty(address profileAddress, address matchAddress) internal
 
 function createDefaultMaleProfile() external payable {
     require(msg.value == 1 ether || msg.value == 10e-7 ether, "Invalid amount of ETH");
+    // require(verify(_pA, _pB, _pC, _pubSignals), "Your idendity proof is not valid");
 
     if (msg.value == 1 ether) {
         require(!profiles[msg.sender].isActive, "Profile is already active");

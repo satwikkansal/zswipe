@@ -1,10 +1,18 @@
 ## Smart contracts
 
-Scroll Sepolia: 0xfB826f136A76215Ce73515C74D5D5DbC8c2425a2
+On Scroll's sepolia test network.
+
+Verifier: 0x0de121BCe757811b2f867b99165e0D351D40F4b0
+AnonAadhaarVerifier: 0x73688AD13f0A99B96c15944F69326CF2f3aF626D
+ZeroSwipes: 0x52Ef0a83834Aafb08bBbe06be1Ef4Ab12d95dCC6
+
 
 Explorer URL:
-1. https://sepolia-blockscout.scroll.io/address/0xfB826f136A76215Ce73515C74D5D5DbC8c2425a2 
-2. https://sepolia.scrollscan.dev/address/0xfB826f136A76215Ce73515C74D5D5DbC8c2425a2
-
+- https://sepolia-blockscout.scroll.io/address/0x0de121BCe757811b2f867b99165e0D351D40F4b0 
+- https://sepolia.scrollscan.dev/address/0x0de121BCe757811b2f867b99165e0D351D40F4b0
+- https://sepolia-blockscout.scroll.io/address/0x73688AD13f0A99B96c15944F69326CF2f3aF626D 
+- https://sepolia.scrollscan.dev/address/0x73688AD13f0A99B96c15944F69326CF2f3aF626D
+- https://sepolia-blockscout.scroll.io/address/0x52Ef0a83834Aafb08bBbe06be1Ef4Ab12d95dCC6 
+- https://sepolia.scrollscan.dev/address/0x52Ef0a83834Aafb08bBbe06be1Ef4Ab12d95dCC6
 
 More contracts were deployed for testing, you can find them here.

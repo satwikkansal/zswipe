@@ -1,5 +1,20 @@
 async function main() {
-    const zeroSwipes = await hre.ethers.deployContract("ZeroSwipes");
+
+    const verifier = await hre.ethers.deployContract("Verifier");
+    await verifier.waitForDeployment();
+
+    console.log(
+        `Verifier  deployed to ${verifier.target}`
+    );
+
+    const anonAadhaarVerifier = await hre.ethers.deployContract("AnonAadhaarVerifier", [verifier.target, "0x000000"]);
+    await anonAadhaarVerifier.waitForDeployment();
+
+    console.log(
+        `AnonAadhaarVerifier  deployed to ${anonAadhaarVerifier.target}`
+    );
+
+    const zeroSwipes = await hre.ethers.deployContract("ZeroSwipes", [anonAadhaarVerifier.target]);
   
     await zeroSwipes.waitForDeployment();
   
