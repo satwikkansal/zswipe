@@ -14,6 +14,14 @@ async function main() {
         `AnonAadhaarVerifier  deployed to ${anonAadhaarVerifier.target}`
     );
 
+    const vote = await hre.ethers.deployContract("Vote", ["Your gender preferences?", ["Male", "Female", "Non-binary"], anonAadhaarVerifier.target]);
+
+    await vote.waitForDeployment();
+
+    console.log(
+        `Vote  deployed to ${vote.target}`
+    )
+    
     const zeroSwipes = await hre.ethers.deployContract("ZeroSwipes", [anonAadhaarVerifier.target]);
   
     await zeroSwipes.waitForDeployment();

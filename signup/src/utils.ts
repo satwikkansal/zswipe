@@ -29,10 +29,10 @@ export const getTotalVotes = async (): Promise<number> => {
 
 export const hasVoted = async (userAddress: string): Promise<boolean> => {
   const provider = ethers.getDefaultProvider(
-    `https://goerli.infura.io/v3/${process.env.NEXT_PUBLIC_GOERLI_PROVIDER_ID}`
+    `https://rpc.ankr.com/scroll_sepolia_testnet`
   );
   const voteContract = new ethers.Contract(
-    "0x" + process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     votingAbi.abi,
     provider
   );

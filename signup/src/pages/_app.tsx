@@ -10,12 +10,12 @@ import {
 } from "@web3modal/ethereum";
 import { Header } from "../components/Header";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { goerli } from "wagmi/chains";
+import { scrollSepolia } from "wagmi/chains";
 import { Web3Modal } from "@web3modal/react";
 import { Footer } from "@/components/Footer";
 import { UserStatus } from "@/interface";
 
-const chains = [goerli];
+const chains = [scrollSepolia];
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || "";
 const appId = process.env.NEXT_PUBLIC_APP_ID || "";
 

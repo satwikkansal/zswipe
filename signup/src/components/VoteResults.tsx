@@ -17,7 +17,7 @@ export const VoteResults: FunctionComponent = ({}) => {
     <>
       {ready ? (
         <span className="inline-flex items-center rounded-md bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700">
-          {totalVote} voters 🇮🇳
+          {totalVote} users
         </span>
       ) : (
         <Loader />

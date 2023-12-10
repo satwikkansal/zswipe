@@ -5,8 +5,7 @@ import { FunctionComponent } from "react";
 export const TestFiles: FunctionComponent = () => {
   return (
     <div className="rounded-md bg-blue-50 p-4">
-      <div className="flex">
-        <div className="flex-shrink-0">
+        {/* <div className="flex-shrink-0">
           <InformationCircleIcon
             className="h-5 w-5 text-blue-400"
             aria-hidden="true"
@@ -27,8 +26,8 @@ export const TestFiles: FunctionComponent = () => {
               <span aria-hidden="true"> &rarr;</span>
             </a>
           </p>
-        </div>
-      </div>
+        </div> */}
+
     </div>
   );
 };

@@ -57,10 +57,10 @@ export default function Vote({ setUserStatus }: VoteProps) {
     <>
       <main className="flex flex-col min-h-[75vh] mx-auto rounded-2xl w-full sm:max-w-screen-sm p-2 sm:p-8 justify-between">
         <h1 className="font-bold text-sm sm:text-2xl">
-          Zero Swipes: Matching Preferences
+          ZeroSwipes: Matching Preferences
         </h1>
         <div className="text-sm sm:text-lg">
-          Submit verification proof.
+          Submit details.
         </div>
 
         <div className="flex w-full place-content-center gap-8">
@@ -75,10 +75,10 @@ export default function Vote({ setUserStatus }: VoteProps) {
             </>
           ) : (
             <>
-              {/* <div className="text-sm sm:text-lg font-medium">
-                On a scale of 0 to 5, how likely are you to recommend this hack?
+              <div className="text-sm sm:text-lg font-medium">
+                What are your Gender preferences.
               </div>
-              <Ratings setRating={setRating} /> */}
+              <Ratings setRating={setRating} />
               {isConnected ? (
                 isSuccess ? (
                   <>
@@ -92,7 +92,7 @@ export default function Vote({ setUserStatus }: VoteProps) {
                     <div className="font-bold">
                       You can check your transaction{" "}
                       <a
-                        href={`https://goerli.etherscan.io/tx/${data?.hash}`}
+                        href={`https://sepolia.scrollscan.dev/tx/${data?.hash}`}
                         target="_blank"
                         className="text-blue-500"
                       >
@@ -112,7 +112,7 @@ export default function Vote({ setUserStatus }: VoteProps) {
                         sendVote(rating, pcd);
                     }}
                   >
-                    Vote
+                    Create profile.
                   </button>
                 )
               ) : (
